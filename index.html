@@ -2,17 +2,70 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
-<meta http-equiv="refresh" content="0; url=https://sites.google.com/view/ismetalbay-apt">
-
 <title>Çatalköy</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Çatalköy">
 <link rel="apple-touch-icon" href="icon.png">
 
+<style>
+body { font-family: sans-serif; text-align:center; padding:20px; }
+#guest { display:none; background:#f5f5f5; padding:20px; border-radius:15px; }
+</style>
+
 </head>
 
 <body>
+
+<h2>Çatalköy Rehber</h2>
+
+<div id="normal">
+<a href="https://sites.google.com/view/ismetalbay-apt">Rehberi Aç</a>
+</div>
+
+<div id="guest">
+<h3 id="welcome"></h3>
+<p>📶 WiFi: XXXXX</p>
+<p>🔑 Şifre: XXXXX</p>
+<p>🧹 Çıkış saati: 11:00</p>
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const code = params.get("code");
+
+// BURAYA KENDİ SHEET LINKİNİ KOY
+const sheetURL = "BURAYA_YAPISTIR";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+const rows = data.split("\n");
+
+rows.forEach(row => {
+const cols = row.split(",");
+
+if(cols[0] === code){
+
+const today = new Date();
+const checkin = new Date(cols[2]);
+const checkout = new Date(cols[3]);
+
+if(today >= checkin && today <= checkout){
+
+document.getElementById("guest").style.display = "block";
+document.getElementById("welcome").innerText = "Hoşgeldin " + cols[1];
+
+}
+
+}
+
+});
+
+});
+
+</script>
+
 </body>
 </html>
