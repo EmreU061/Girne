@@ -35,27 +35,31 @@ body { font-family: sans-serif; text-align:center; padding:20px; }
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 
-// BURAYA KENDİ SHEET LINKİNİ KOY
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vShsoN7IL8GZLDVobLxcxTOIWOFaCyCXRMnouLycmzG6T4PoIphWHLZwcoBuc6D0KXFFbr7MB0laAbJ/pub?output=csv";
 
 fetch(sheetURL)
 .then(res => res.text())
 .then(data => {
-const rows = data.split("\n");
+
+const rows = data.split("\n").slice(1); // başlığı at
 
 rows.forEach(row => {
+
 const cols = row.split(",");
 
-if(cols[0] === code){
-
-const today = new Date();
+const guestCode = cols[0]?.trim();
+const guestName = cols[1]?.trim();
 const checkin = new Date(cols[2]);
 const checkout = new Date(cols[3]);
+
+const today = new Date();
+
+if(code === guestCode){
 
 if(today >= checkin && today <= checkout){
 
 document.getElementById("guest").style.display = "block";
-document.getElementById("welcome").innerText = "Hoşgeldin " + cols[1];
+document.getElementById("welcome").innerText = "Hoşgeldin " + guestName;
 
 }
 
@@ -64,6 +68,8 @@ document.getElementById("welcome").innerText = "Hoşgeldin " + cols[1];
 });
 
 });
+
+</script>
 
 </script>
 
